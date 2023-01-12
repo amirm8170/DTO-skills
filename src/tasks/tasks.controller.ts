@@ -1,5 +1,5 @@
 import { Task } from './task.entity';
-import { taskRepository } from './tasks.repository';
+import { TaskRepository } from './tasks.repository';
 import { updateTaskStatusDto } from './DTO/update-task-status.dto';
 import { filterDto } from './DTO/search-task.dto';
 import { createTaskDto } from './DTO/create-task.dto';
@@ -19,43 +19,17 @@ import { TasksService } from './tasks.service';
 @Controller('tasks')
 export class TasksController {
   constructor(private TasksService: TasksService) {}
-  // @Get()
-  // getAllTasks() {
-  //   return this.TasksService.getAllTasks();
-  // }
-  @Get('/:id')
-  getTaskById(@Param('id') id: string): Promise<Task> {
-    return this.TasksService.getTaskById(id);
+  @Post()
+  createTask(@Body() createTaskDto: createTaskDto): Promise<Task> {
+    return this.TasksService.createTask(createTaskDto);
   }
   // @Get('/:id')
-  // getTaskById(@Param('id') id: string): Task {
+  // getTaskById(@Param('id') id: string): Promise<Task> {
   //   return this.TasksService.getTaskById(id);
   // }
-  // @Get()
-  // searchTaskDto(@Query() filterDto: filterDto): Task[] {
-  //   if (Object.keys(filterDto).length) {
-  //     return this.TasksService.searchTaskDto(filterDto);
-  //   } else {
-  //     return this.TasksService.getAllTasks();
-  //   }
-  // }
+
   // @Delete('/:id')
-  // deleteTaskById(@Param('id') id: string): string {
-  //   this.TasksService.deleteTaskById(id);
-  //   return 'deleted';
-  // }
-
-  // @Patch('/:id/status')
-  // updateTaskStatus(
-  //   @Param('id') id: string,
-  //   @Body() updateTaskStatusDto: updateTaskStatusDto,
-  // ): Task {
-  //   const { status } = updateTaskStatusDto;
-  //   return this.TasksService.updateTaskById(id, status);
-  // }
-
-  // @Post()
-  // createTask(@Body() createTaskDto: createTaskDto): Task {
-  //   return this.TasksService.createTask(createTaskDto);
+  // deleteTaskById(@Param('id') id: string): Promise<void> {
+  //   return this.TasksService.deleteTaskById(id);
   // }
 }
