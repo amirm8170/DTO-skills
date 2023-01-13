@@ -1,3 +1,4 @@
+import { Task } from './tasks/task.entity';
 import { Module } from '@nestjs/common';
 import { TasksModule } from './tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,7 +11,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       port: 5432,
       username: 'postgres',
       password: 'postgres',
-      database: 'task-management',
+      database: 'Nest',
+      entities: ['dist/**/*.entity.js'],
       autoLoadEntities: true,
       synchronize: true,
     }),
