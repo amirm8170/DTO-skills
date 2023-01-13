@@ -3,7 +3,7 @@ import { TaskRepository } from './tasks-repository.entity';
 import { filterDto } from './DTO/search-task.dto';
 import { createTaskDto } from './DTO/create-task.dto';
 import { TaskStatus } from './task-status.enum';
-import { Injectable, NotFoundException, Render } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -22,8 +22,22 @@ export class TasksService {
     await this.TaskRepository.save(newTask);
     return newTask;
   }
-  async getAllTasks(): Promise<Task[]> {
-    return await this.TaskRepository.find();
+  async getTasks(filterDto: filterDto): Promise<Task[]> {
+    const { status, search } = filterDto;
+    const query = this.TaskRepository.createQueryBuilder('task');
+    if (status) {
+      query.andWhere('task.status=:status', { status });
+    }
+    if (search) {
+      query.andWhere(
+        'LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)',
+        {
+          search: `%${search}%`,
+        },
+      );
+    }
+    const tasks = await query.getMany();
+    return tasks;
   }
   async getTaskById(id: string): Promise<Task> {
     const findTask = await this.TaskRepository.findOneBy({ id });
