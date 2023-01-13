@@ -1,6 +1,7 @@
 import { AuthCredentialsDto } from './DTO/credentials.dto';
 import { Users } from './users.entity';
 import { UserRepository } from './users-repository.entity';
+import * as bcrypt from 'bcrypt';
 import {
   ConflictException,
   Injectable,
@@ -16,9 +17,13 @@ export class AuthService {
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password } = authCredentialsDto;
+
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(password, salt);
+
     const newUser = this.UserRepository.create({
       username,
-      password,
+      password: hashPassword,
     });
     try {
       await this.UserRepository.save(newUser);
