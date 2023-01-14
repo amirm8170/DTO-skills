@@ -1,4 +1,3 @@
-import { Users } from './users.entity';
 import { AuthService } from './auth.service';
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthCredentialsDto } from './DTO/credentials.dto';
@@ -9,5 +8,11 @@ export class AuthController {
   @Post('/signup')
   createUser(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.authService.signUp(authCredentialsDto);
+  }
+  @Post('/signIn')
+  signIn(
+    @Body() authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string }> {
+    return this.authService.signIn(authCredentialsDto);
   }
 }
